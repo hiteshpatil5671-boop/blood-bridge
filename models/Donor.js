@@ -24,14 +24,16 @@ const donorSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true
+        },
+
+        latitude: {
+            type: Number
+        },
+
+        longitude: {
+            type: Number
         }
     },
-    latitude: {
-    type: Number
-},
-longitude: {
-    type: Number
-},
     {
         timestamps: true
     }
