@@ -1859,7 +1859,7 @@
         });
 
         // Form Validation & Submission
-        function handleDonorRegistration(e) {
+        async function handleDonorRegistration(e) {
             e.preventDefault();
             const name = document.getElementById('donor-name').value;
             const email = document.getElementById('donor-email').value;
@@ -1869,12 +1869,30 @@
                 showNotification('Age must be between 18-65', 'error');
                 return;
             }
+            let latitude = null;
+let longitude = null;
 
-            const donorData = {
+if (navigator.geolocation) {
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+    } catch (error) {
+        console.log("Location permission denied or unavailable.");
+    }
+}
+
+    
+   const donorData = {
     name: name,
     email: email,
     bloodGroup: document.getElementById('donor-blood-group').value,
-    location: document.getElementById('donor-location').value.trim()
+    location: document.getElementById('donor-location').value.trim(),
+    latitude: latitude,
+    longitude: longitude
 };
 fetch("https://blood-bridge-2rmt.onrender.com/api/donors", {
     method: "POST",
