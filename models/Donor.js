@@ -31,7 +31,7 @@ const donorSchema = new mongoose.Schema(
 },
 longitude: {
     type: Number
-}
+},
     {
         timestamps: true
     }
