@@ -3,11 +3,13 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
+const { OAuth2Client } = require("google-auth-library");
 const Donor = require("./models/Donor");
 const Request = require("./models/Request");
 const ContactMessage = require("./models/ContactMessage");
 const Camp = require("./models/Camp");
+const GOOGLE_CLIENT_ID = "1005423740477-au01tr2uijj31fths31vi1l6f4hjq92l.apps.googleusercontent.com";
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const app = express();
 const PORT = 3000;
@@ -44,7 +46,55 @@ app.get("/", (req, res) => {
 app.get("/test-camps", (req, res) => {
     res.send("Camps route is working!");
 });
+// ===============================
+// Google Donor Login
+// ===============================
 
+app.post("/api/auth/google", async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        if (!credential) {
+            return res.status(400).json({
+                message: "Google credential is required"
+            });
+        }
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        const email = payload.email;
+
+        const donor = await Donor.findOne({ email });
+
+        if (!donor) {
+            return res.status(404).json({
+                message: "Donor account not found. Please register first."
+            });
+        }
+
+        res.json({
+            message: "Google login successful",
+            donor: {
+                id: donor._id,
+                name: donor.name,
+                email: donor.email,
+                bloodGroup: donor.bloodGroup,
+                location: donor.location
+            }
+        });
+
+    } catch (error) {
+        console.error("Google login failed:", error.message);
+
+        res.status(401).json({
+            message: "Google authentication failed"
+        });
+    }
+});
 // ===============================
 // Donor APIs
 // ===============================
