@@ -2011,10 +2011,31 @@ const donors = await response.json();
     });
   };
 
-  function handleGoogleLogin(response) {
-    console.log("Google login successful");
-    console.log(response.credential);
-  }
+ function handleGoogleLogin(response) {
+    fetch("https://blood-bridge-2rmt.onrender.com/api/auth/google", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            credential: response.credential
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+
+        if (data.donor) {
+            alert("Welcome, " + data.donor.name);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Login error:", error);
+        alert("Google login failed.");
+    });
+}
 </script>
 </body>
     <!-- BloodBridge deployment update -->
