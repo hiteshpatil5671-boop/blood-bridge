@@ -12,7 +12,7 @@ const GOOGLE_CLIENT_ID = "1005423740477-au01tr2uijj31fths31vi1l6f4hjq92l.apps.go
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 10000;
 
 app.use(cors());
 app.use(express.json());
@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("MongoDB Connected Successfully!");
 
-        app.listen(PORT, () => {
+        app.listen(PORT, "0.0.0.0", () => {
             console.log(
                 `BloodBridge server running at http://localhost:${PORT}`
             );
