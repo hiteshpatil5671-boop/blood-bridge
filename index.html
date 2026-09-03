@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="BloodBridge - Blood Donation & Awareness Platform for Community Engagement">
@@ -1488,6 +1489,9 @@
                 </div>
                 <div style="max-width: 700px; margin: 0 auto;">
                     <div class="card">
+                        <button type="button" id="google-login-btn" class="btn btn-primary" style="width: 100%; margin-bottom: var(--spacing-lg);">
+    Continue with Google
+</button>
                         <form id="donor-form-element" class="registration-form" style="padding: 0; background: none; box-shadow: none;" onsubmit="handleDonorRegistration(event)">
                             <fieldset>
                                 <legend>Personal Information</legend>
@@ -1993,6 +1997,25 @@ const donors = await response.json();
         });
         document.getElementById('contact-form')?.addEventListener('submit', handleContactSubmit);
     </script>
+    <script>
+  const GOOGLE_CLIENT_ID = "1005423740477-au01tr2uijj31fths31vi1l6f4hjq92l.apps.googleusercontent.com";
+
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleLogin
+    });
+
+    document.getElementById("google-login-btn").addEventListener("click", function () {
+      google.accounts.id.prompt();
+    });
+  };
+
+  function handleGoogleLogin(response) {
+    console.log("Google login successful");
+    console.log(response.credential);
+  }
+</script>
 </body>
     <!-- BloodBridge deployment update -->
 </html>
