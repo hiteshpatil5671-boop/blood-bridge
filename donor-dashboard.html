@@ -50,11 +50,7 @@ min-height: 100vh;
         <hr>
 
     <div id="donor-info">
-        <form id="edit-profile-form" style="display:none;">
-    <input type="text" id="edit-name" placeholder="Name">
-    <input type="text" id="edit-blood-group" placeholder="Blood Group">
-    <input type="text" id="edit-location" placeholder="Location">
-    <button type="submit">Save Changes</button>
+        
 </form>
         <script>
 document.getElementById("edit-profile-btn").onclick = function () {
@@ -62,6 +58,12 @@ document.getElementById("edit-profile-btn").onclick = function () {
 };
 </script>
         </div>
+        <form id="edit-profile-form" style="display:none;">
+<input type="text" id="edit-name" placeholder="Name">
+<input type="text" id="edit-blood-group" placeholder="Blood Group">
+<input type="text" id="edit-location" placeholder="Location">
+<button type="submit">Save Changes</button>
+</form>
         
     </div>
     <script>
@@ -86,6 +88,11 @@ function logoutDonor() {
     localStorage.removeItem("bloodbridge_donor");
     window.location.href = "index.html";
 }
+</script>
+    <script>
+document.getElementById("edit-profile-btn").onclick = function () {
+    document.getElementById("edit-profile-form").style.display = "block";
+};
 </script>
     <script>
 document.getElementById("edit-profile-btn").onclick = function () {
