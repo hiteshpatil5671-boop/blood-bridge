@@ -2026,6 +2026,7 @@ const donors = await response.json();
         console.log(data);
 
         if (data.donor) {
+            localStorage.setItem("bloodbridge_donor", JSON.stringify(data.donor));
             alert("Welcome, " + data.donor.name);
         } else {
             alert(data.message);
