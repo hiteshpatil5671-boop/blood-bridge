@@ -16,5 +16,20 @@
     <div id="donor-info">
         Loading donor information...
     </div>
+    <script>
+    const donor = JSON.parse(localStorage.getItem("bloodbridge_donor"));
+
+    if (donor) {
+        document.getElementById("donor-info").innerHTML = `
+            <p><strong>Name:</strong> ${donor.name}</p>
+            <p><strong>Email:</strong> ${donor.email}</p>
+            <p><strong>Blood Group:</strong> ${donor.bloodGroup}</p>
+            <p><strong>Location:</strong> ${donor.location}</p>
+        `;
+    } else {
+        document.getElementById("donor-info").innerHTML =
+            "<p>No donor information found. Please login first.</p>";
+    }
+</script>
 </body>
 </html>
