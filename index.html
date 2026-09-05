@@ -2028,6 +2028,7 @@ const donors = await response.json();
         if (data.donor) {
             localStorage.setItem("bloodbridge_donor", JSON.stringify(data.donor));
             alert("Welcome, " + data.donor.name);
+            window.location.href = "donor-dashboard.html";
         } else {
             alert(data.message);
         }
