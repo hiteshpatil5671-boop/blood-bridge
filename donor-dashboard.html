@@ -62,5 +62,13 @@
             "<p>No donor information found. Please login first.</p>";
     }
 </script>
+    <button onclick="logoutDonor()">Logout</button>
+
+<script>
+function logoutDonor() {
+    localStorage.removeItem("bloodbridge_donor");
+    window.location.href = "index.html";
+}
+</script>
 </body>
 </html>
