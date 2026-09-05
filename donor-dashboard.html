@@ -45,15 +45,17 @@ min-height: 100vh;
     <div class="dashboard-card">
     <h2>My Donor Profile</h2>
         <button id="edit-profile-btn">Edit Profile</button>
-        <script>
-document.getElementById("edit-profile-btn").onclick = function () {
-    alert("Edit Profile feature coming soon!");
-};
-</script>
+       
         <p>Your registered donor information</p>
         <hr>
 
     <div id="donor-info">
+        <form id="edit-profile-form" style="display:none;">
+    <input type="text" id="edit-name" placeholder="Name">
+    <input type="text" id="edit-blood-group" placeholder="Blood Group">
+    <input type="text" id="edit-location" placeholder="Location">
+    <button type="submit">Save Changes</button>
+</form>
         </div>
         
     </div>
@@ -79,6 +81,11 @@ function logoutDonor() {
     localStorage.removeItem("bloodbridge_donor");
     window.location.href = "index.html";
 }
+</script>
+    <script>
+document.getElementById("edit-profile-btn").onclick = function () {
+    document.getElementById("edit-profile-form").style.display = "block";
+};
 </script>
 </body>
 </html>
