@@ -143,6 +143,10 @@ transition: transform 0.2s ease, box-shadow 0.2s ease;
     font-size: 24px;
     margin-bottom: 18px;
 }
+        .dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.14);
+}
 </style>
 </head>
 
@@ -184,11 +188,26 @@ document.getElementById("edit-profile-btn").onclick = function () {
 <input type="text" id="edit-blood-group" placeholder="Blood Group">
 <input type="text" id="edit-location" placeholder="Location">
 <button type="submit">Save Changes</button>
-</form>
+            <p id="profile-update-message"></p>
+           
+
         
     </div>
+   
+        <div class="dashboard-card">
+    <h2>📊 Donor Statistics</h2>
+    <p><strong>Total Donations:</strong> 0 donations</p>
+    <p><strong>Lives Helped:</strong> 0</p>
+    <p><strong>Last Donation:</strong> Not recorded yet</p>
+    <p><strong>Blood Group:</strong> <span id="stats-blood-group">-</span></p>
+            <p><strong>Location:</strong> <span id="stats-location">-</span></p>
+</div>
     <script>
     const donor = JSON.parse(localStorage.getItem("bloodbridge_donor"));
+        if (donor) {
+    document.getElementById("stats-blood-group").textContent = donor.bloodGroup;
+    document.getElementById("stats-location").textContent = donor.location;
+}
 
     if (donor) {
         document.getElementById("donor-info").innerHTML = `
@@ -201,6 +220,9 @@ document.getElementById("edit-profile-btn").onclick = function () {
         document.getElementById("donor-info").innerHTML =
             "<p>No donor information found. Please login first.</p>";
     }
+        document.getElementById("edit-profile-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+});
 </script>
     <button onclick="logoutDonor()">Logout</button>
 
