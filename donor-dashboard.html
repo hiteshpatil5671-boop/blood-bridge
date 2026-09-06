@@ -285,12 +285,11 @@
 
         // Get donor information from localStorage
 
-        let donor = JSON.parse(
-            localStorage.getItem("bloodbridge_donor")
-            console.log("DONOR DATA:", donor);
-        );
+      let donor = JSON.parse(
+    localStorage.getItem("bloodbridge_donor")
+);
 
-
+console.log("DONOR DATA:", donor);
         // Display donor information
 
         if (donor) {
@@ -398,6 +397,33 @@
 
                 donor.location =
                     document.getElementById("edit-location").value.trim();
+                const donorId = donor._id || donor.id;
+
+fetch("https://blood-bridge-2rmt.onrender.com/api/donors/" + donorId, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        name: donor.name,
+        bloodGroup: donor.bloodGroup,
+        location: donor.location
+    })
+})
+.then(res => res.json())
+.then(data => {
+    if (data.donor) {
+        donor = data.donor;
+
+        localStorage.setItem(
+            "bloodbridge_donor",
+            JSON.stringify(donor)
+        );
+    }
+})
+.catch(error => {
+    console.error("Profile update error:", error);
+});
 
 
                 // Save updated donor information
