@@ -336,6 +336,42 @@
 
                 document.getElementById("edit-location").value =
                     donor.location || "";
+                fetch("https://blood-bridge-2rmt.onrender.com/api/donors/" + donor.id, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        name: donor.name,
+        bloodGroup: donor.bloodGroup,
+        location: donor.location
+    })
+})
+.then(res => res.json())
+.then(data => {
+
+    if (data.donor) {
+        donor = data.donor;
+
+        localStorage.setItem(
+            "bloodbridge_donor",
+            JSON.stringify(donor)
+        );
+
+        document.getElementById("profile-update-message").textContent =
+            "Profile updated successfully!";
+    } else {
+        document.getElementById("profile-update-message").textContent =
+            "Profile update failed.";
+    }
+
+})
+.catch(error => {
+    console.error("Profile update error:", error);
+
+    document.getElementById("profile-update-message").textContent =
+        "Profile update failed.";
+});
 
             }
         );
