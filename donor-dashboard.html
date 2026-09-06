@@ -222,6 +222,12 @@ document.getElementById("edit-profile-btn").onclick = function () {
     }
         document.getElementById("edit-profile-form").addEventListener("submit", function (event) {
     event.preventDefault();
+            const donor = JSON.parse(localStorage.getItem("bloodbridge_donor"));
+
+donor.name = document.getElementById("edit-name").value;
+donor.bloodGroup = document.getElementById("edit-blood-group").value;
+donor.location = document.getElementById("edit-location").value;
+            localStorage.setItem("bloodbridge_donor", JSON.stringify(donor));
 });
 </script>
     <button onclick="logoutDonor()">Logout</button>
