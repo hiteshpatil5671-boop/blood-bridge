@@ -95,6 +95,36 @@ app.post("/api/auth/google", async (req, res) => {
         });
     }
 });
+// Update donor profile
+app.put("/api/donors/:id", async (req, res) => {
+    try {
+        const { name, bloodGroup, location } = req.body;
+
+        const donor = await Donor.findByIdAndUpdate(
+            req.params.id,
+            { name, bloodGroup, location },
+            { new: true, runValidators: true }
+        );
+
+        if (!donor) {
+            return res.status(404).json({
+                message: "Donor not found"
+            });
+        }
+
+        res.json({
+            message: "Donor profile updated successfully",
+            donor
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            message: "Profile update failed",
+            error: error.message
+        });
+    }
+});
+
 // ===============================
 // Donor APIs
 // ===============================
