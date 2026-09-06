@@ -287,6 +287,7 @@
 
         let donor = JSON.parse(
             localStorage.getItem("bloodbridge_donor")
+            console.log("DONOR DATA:", donor);
         );
 
 
@@ -336,7 +337,7 @@
 
                 document.getElementById("edit-location").value =
                     donor.location || "";
-                fetch("https://blood-bridge-2rmt.onrender.com/api/donors/" + donor.id, {
+                fetch("https://blood-bridge-2rmt.onrender.com/api/donors/" + donor._id, {
     method: "PUT",
     headers: {
         "Content-Type": "application/json"
