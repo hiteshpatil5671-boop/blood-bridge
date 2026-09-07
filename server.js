@@ -160,7 +160,23 @@ app.post("/api/donors", async (req, res) => {
         });
     }
 });
+// Add donation record
+app.post("/api/donations", async (req, res) => {
+    try {
+        const donation = new Donation(req.body);
+        const savedDonation = await donation.save();
 
+        res.status(201).json({
+            message: "Donation recorded successfully!",
+            donation: savedDonation
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: "Donation recording failed",
+            error: error.message
+        });
+    }
+});
 
 // ===============================
 // Blood Request API
