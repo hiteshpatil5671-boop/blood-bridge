@@ -129,6 +129,43 @@ button:hover {
 }
 
 .statistics-card {
+    .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-box {
+    padding: 20px;
+    background: #fff6f6;
+    border: 1px solid #f0d0d0;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.stat-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.stat-box strong {
+    display: block;
+    color: #b71c1c;
+    margin-bottom: 8px;
+}
+
+.stat-box span {
+    display: block;
+    color: #555;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
     border-top: 5px solid #ef476f;
 }
 
@@ -245,38 +282,45 @@ button:hover {
 
     <!-- DONOR STATISTICS -->
 
-    <div class="dashboard-card statistics-card">
+   <div class="dashboard-card statistics-card">
 
-        <h2>📊 Donor Statistics</h2>
+    <h2>📊 Donor Statistics</h2>
 
-        <p>
-            <strong>Total Donations:</strong>
-            0 donations
-        </p>
+    <div class="stats-grid">
 
-        <p>
-            <strong>Lives Helped:</strong>
-            0
-        </p>
+        <div class="stat-box">
+            <div class="stat-icon">🩸</div>
+            <strong>Total Donations</strong>
+            <span>0 donations</span>
+        </div>
 
-        <p>
-            <strong>Last Donation:</strong>
-            Not recorded yet
-        </p>
+        <div class="stat-box">
+            <div class="stat-icon">❤️</div>
+            <strong>Lives Helped</strong>
+            <span>0</span>
+        </div>
 
-        <p>
-            <strong>Blood Group:</strong>
+        <div class="stat-box">
+            <div class="stat-icon">📅</div>
+            <strong>Last Donation</strong>
+            <span>Not recorded yet</span>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">🩸</div>
+            <strong>Blood Group</strong>
             <span id="stats-blood-group">-</span>
-        </p>
+        </div>
 
-        <p>
-            <strong>Location:</strong>
+        <div class="stat-box">
+            <div class="stat-icon">📍</div>
+            <strong>Location</strong>
             <span id="stats-location">-</span>
-        </p>
+        </div>
 
     </div>
 
-
+</div>
     <!-- LOGOUT -->
 
     <button type="button" id="logout-btn">
