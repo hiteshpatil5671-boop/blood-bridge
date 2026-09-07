@@ -327,7 +327,19 @@ button:hover {
         Logout
     </button>
 
+<div class="dashboard-card history-card">
 
+    <h2>🩸 Donation History</h2>
+
+    <div class="history-item">
+        <div>
+            <strong>No donations recorded yet</strong>
+            <p>Your future blood donations will appear here.</p>
+        </div>
+        <span>📅</span>
+    </div>
+
+</div>
     <script>
 
         // Get donor information from localStorage
@@ -521,19 +533,7 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/donors/" + donorId, {
             }
         );
 
-<div class="dashboard-card history-card">
 
-    <h2>🩸 Donation History</h2>
-
-    <div class="history-item">
-        <div>
-            <strong>No donations recorded yet</strong>
-            <p>Your future blood donations will appear here.</p>
-        </div>
-        <span>📅</span>
-    </div>
-
-</div>
         // Logout
 
         document.getElementById("logout-btn").addEventListener(
