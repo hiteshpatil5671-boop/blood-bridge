@@ -330,6 +330,9 @@ button:hover {
 <div class="dashboard-card history-card">
 
     <h2>🩸 Donation History</h2>
+    <button id="record-donation-btn" type="button">
+    🩸 Record Donation
+</button>
     <div id="donation-history-list">
     <p>Loading donation history...</p>
 </div>
@@ -579,6 +582,41 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/donations")
             <p>Unable to load donation history.</p>
         `;
     });
+        document.getElementById("record-donation-btn").addEventListener("click", function () {
+    if (!donor) return;
+
+    const donationDate = prompt("Enter donation date (YYYY-MM-DD):");
+
+    if (!donationDate) return;
+
+    const donorId = donor._id || donor.id;
+
+    fetch("https://blood-bridge-2rmt.onrender.com/api/donations", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            donorId: donorId,
+            donationDate: donationDate,
+            bloodGroup: donor.bloodGroup
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.donation) {
+            alert("Donation recorded successfully!");
+
+            location.reload();
+        } else {
+            alert("Failed to record donation.");
+        }
+    })
+    .catch(error => {
+        console.error("Donation error:", error);
+        alert("Unable to record donation.");
+    });
+});
     </script>
 
 </body>
