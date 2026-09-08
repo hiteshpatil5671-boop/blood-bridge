@@ -570,6 +570,7 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/donations")
                     <strong>Blood Donation</strong>
                     <p>Blood Group: ${donation.bloodGroup}</p>
                     <p>Date: ${new Date(donation.donationDate).toLocaleDateString()}</p>
+                    <p>Status: ${donation.status || "Pending"}</p>
                 </div>
                 <span>🩸</span>
             </div>
