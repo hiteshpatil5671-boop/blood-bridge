@@ -178,6 +178,18 @@ app.post("/api/donations", async (req, res) => {
         });
     }
 });
+// Get donation history
+app.get("/api/donations", async (req, res) => {
+    try {
+        const donations = await Donation.find().sort({ donationDate: -1 });
+        res.json(donations);
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to fetch donation history",
+            error: error.message
+        });
+    }
+});
 
 // ===============================
 // Blood Request API
