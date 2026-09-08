@@ -473,6 +473,34 @@
                 </div>
             `;
         });
+    async function updateDonationStatus(id, status) {
+    try {
+        const response = await fetch(
+            `https://blood-bridge-2rmt.onrender.com/api/donations/${id}/status`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ status })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Failed to update donation status.");
+            return;
+        }
+
+        alert(`Donation ${status.toLowerCase()} successfully.`);
+        location.reload();
+
+    } catch (error) {
+        console.error("Status update error:", error);
+        alert("Unable to update donation status.");
+    }
+}
 
 
     function updateStats(donations) {
@@ -551,17 +579,16 @@
                 <div class="actions">
 
                     <button
-                        class="btn confirm"
-                        onclick="confirmDonation('${donation._id}')">
-                        ✅ Confirm
-                    </button>
-
-                    <button
-                        class="btn reject"
-                        onclick="rejectDonation('${donation._id}')">
-                        ❌ Reject
-                    </button>
-
+                        <button
+    class="btn confirm"
+    onclick="updateDonationStatus('${donation._id}', 'Confirmed')">
+    ✅ Confirm
+</button>
+                   <button
+    class="btn reject"
+    onclick="updateDonationStatus('${donation._id}', 'Rejected')">
+    ❌ Reject
+</button>
                 </div>
 
             </div>
