@@ -16,7 +16,7 @@ const donationSchema = new mongoose.Schema(
         bloodGroup: {
             type: String,
             required: true
-        }
+        },
         status: {
     type: String,
     enum: ["Pending", "Confirmed", "Rejected"],
