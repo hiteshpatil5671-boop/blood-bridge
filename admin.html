@@ -496,6 +496,7 @@
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
+                    "Authorization": `Bearer ${sessionStorage.getItem("adminCredential")}`
                 },
                 body: JSON.stringify({ status })
             }
@@ -652,6 +653,7 @@ google.accounts.id.initialize({
                     data.message || "Admin login failed.";
                 return;
             }
+            sessionStorage.setItem("adminCredential", response.credential);
 
             document.getElementById("admin-login").style.display = "none";
             document.getElementById("admin-dashboard").style.display = "block";
