@@ -17,6 +17,11 @@ const donationSchema = new mongoose.Schema(
             type: String,
             required: true
         }
+        status: {
+    type: String,
+    enum: ["Pending", "Confirmed", "Rejected"],
+    default: "Pending"
+}
     },
     {
         timestamps: true
