@@ -593,7 +593,6 @@
                 <div class="actions">
 
                     <button
-                        <button
     class="btn confirm"
     onclick="updateDonationStatus('${donation._id}', 'Confirmed')">
     ✅ Confirm
@@ -621,6 +620,7 @@
 
         displayDonations(filtered);
     });
+    window.addEventListener("load", function () {
     const adminLoginButton = document.getElementById("google-login-button");
 const loginMessage = document.getElementById("login-message");
 
@@ -671,6 +671,7 @@ google.accounts.id.renderButton(
         text: "continue_with"
     }
 );
+        });
 </script>
 </body>
 </html>
