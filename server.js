@@ -179,6 +179,40 @@ app.post("/api/donations", async (req, res) => {
 });
     }
 });
+// Update donation status
+app.put("/api/donations/:id/status", async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        if (!["Pending", "Confirmed", "Rejected"].includes(status)) {
+            return res.status(400).json({
+                message: "Invalid donation status"
+            });
+        }
+
+        const donation = await Donation.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true, runValidators: true }
+        );
+
+        if (!donation) {
+            return res.status(404).json({
+                message: "Donation not found"
+            });
+        }
+
+        res.json({
+            message: `Donation ${status.toLowerCase()} successfully`,
+            donation
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            message: "Failed to update donation status"
+        });
+    }
+});
 // Get donation history
 app.get("/api/donations", async (req, res) => {
     try {
