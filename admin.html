@@ -621,6 +621,56 @@
 
         displayDonations(filtered);
     });
+    const adminLoginButton = document.getElementById("google-login-button");
+const loginMessage = document.getElementById("login-message");
+
+google.accounts.id.initialize({
+    client_id: "1005423740477-au01tr2uijj31fths31vi1l6f4hjq92l.apps.googleusercontent.com",
+
+    callback: async (response) => {
+        try {
+            loginMessage.textContent = "Signing in...";
+
+            const result = await fetch(
+                "https://blood-bridge-2rmt.onrender.com/api/auth/admin",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        credential: response.credential
+                    })
+                }
+            );
+
+            const data = await result.json();
+
+            if (!result.ok) {
+                loginMessage.textContent =
+                    data.message || "Admin login failed.";
+                return;
+            }
+
+            document.getElementById("admin-login").style.display = "none";
+
+            loginMessage.textContent = "Admin login successful.";
+
+        } catch (error) {
+            console.error("Admin login error:", error);
+            loginMessage.textContent = "Unable to connect to server.";
+        }
+    }
+});
+
+google.accounts.id.renderButton(
+    adminLoginButton,
+    {
+        theme: "outline",
+        size: "large",
+        text: "continue_with"
+    }
+);
 </script>
 </body>
 </html>
