@@ -173,9 +173,10 @@ app.post("/api/donations", async (req, res) => {
         });
     } catch (error) {
         res.status(400).json({
-            message: "Donation recording failed",
-            error: error.message
-        });
+    message: "Donation recording failed",
+    error: error.message,
+    receivedData: req.body
+});
     }
 });
 // Get donation history
