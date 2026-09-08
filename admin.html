@@ -495,7 +495,7 @@
             {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${sessionStorage.getItem("adminCredential")}`
                 },
                 body: JSON.stringify({ status })
