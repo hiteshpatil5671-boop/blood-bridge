@@ -223,6 +223,29 @@ app.post("/api/donations", async (req, res) => {
 });
 // Update donation status
 app.put("/api/donations/:id/status", async (req, res) => {
+            const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                message: "Admin authentication required"
+            });
+        }
+
+        const credential = authHeader.split(" ")[1];
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        const email = payload.email;
+
+        if (email !== process.env.ADMIN_EMAIL) {
+            return res.status(403).json({
+                message: "Admin access denied"
+            });
+        }
     try {
         const { status } = req.body;
 
