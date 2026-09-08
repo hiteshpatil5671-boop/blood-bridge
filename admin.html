@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BloodBridge | Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8b0000, #d62828);
+            color: white;
+            padding: 22px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            font-size: 36px;
+        }
+
+        .brand h1 {
+            font-size: 25px;
+        }
+
+        .brand p {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+
+        .admin-badge {
+            background: rgba(255, 255, 255, 0.18);
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Main */
+        .container {
+            max-width: 1250px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+        }
+
+        /* Statistics */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border-left: 5px solid #d62828;
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h3 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            gap: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 21px;
+        }
+
+        .pending-badge {
+            background: #fff4cc;
+            color: #8a6500;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Search */
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box:focus {
+            border-color: #d62828;
+        }
+
+        /* Donation Card */
+        .donation-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+
+        .donation-card:hover {
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .donation-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .donor-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .donor-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #ffe4e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .donor-info h3 {
+            font-size: 16px;
+        }
+
+        .donor-info p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .status {
+            background: #fff4cc;
+            color: #8a6500;
+            padding: 6px 11px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail p:first-child {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .detail p:last-child {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .blood {
+            color: #d62828;
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 17px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .confirm {
+            background: #16a34a;
+            color: white;
+        }
+
+        .reject {
+            background: #dc2626;
+            color: white;
+        }
+
+        .view {
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+        }
+
+        /* Empty State */
+        .empty {
+            text-align: center;
+            padding: 55px 20px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty h3 {
+            color: #374151;
+            margin-bottom: 7px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 18px 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 18px;
+            }
+
+            .section-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .donation-top {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .brand h1 {
+                font-size: 20px;
+            }
+
+            .admin-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="brand">
+            <div class="brand-icon">🩸</div>
+
+            <div>
+                <h1>BloodBridge</h1>
+                <p>Saving lives through verified blood donations</p>
+            </div>
+        </div>
+
+        <div class="admin-badge">
+            🛡️ Admin Panel
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="welcome">
+            <h2>Admin Dashboard</h2>
+            <p>Manage and verify BloodBridge donation records.</p>
+        </div>
+
+
+        <!-- Statistics -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <h3 id="pending-count">0</h3>
+                <p>Pending Donations</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <h3 id="confirmed-count">0</h3>
+                <p>Confirmed Donations</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">❌</div>
+                <h3 id="rejected-count">0</h3>
+                <p>Rejected Donations</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🩸</div>
+                <h3 id="total-count">0</h3>
+                <p>Total Donation Records</p>
+            </div>
+
+        </section>
+
+
+        <!-- Pending Donations -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>🩸 Donation Verification</h2>
+
+                <span class="pending-badge">
+                    Pending Review
+                </span>
+
+            </div>
+
+
+            <input
+                type="text"
+                id="search"
+                class="search-box"
+                placeholder="🔍 Search by donor ID or blood group..."
+            >
+
+
+            <div id="donations-list">
+
+                <div class="empty">
+
+                    <div class="empty-icon">📋</div>
+
+                    <h3>Loading donation records...</h3>
+
+                    <p>Please wait while records are loaded.</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        © 2026 BloodBridge · Admin Management System
+    </footer>
+
+</body>
+</html>
