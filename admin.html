@@ -451,6 +451,135 @@
     <footer>
         © 2026 BloodBridge · Admin Management System
     </footer>
+<script>
+    let allDonations = [];
 
+    fetch("https://blood-bridge-2rmt.onrender.com/api/donations")
+        .then(res => res.json())
+        .then(data => {
+            allDonations = data;
+
+            updateStats(data);
+            displayDonations(data);
+        })
+        .catch(error => {
+            console.error("Admin donation fetch error:", error);
+
+            document.getElementById("donations-list").innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">⚠️</div>
+                    <h3>Unable to load donation records</h3>
+                    <p>Please try again later.</p>
+                </div>
+            `;
+        });
+
+
+    function updateStats(donations) {
+
+        const pending = donations.filter(d => d.status === "Pending").length;
+        const confirmed = donations.filter(d => d.status === "Confirmed").length;
+        const rejected = donations.filter(d => d.status === "Rejected").length;
+
+        document.getElementById("pending-count").textContent = pending;
+        document.getElementById("confirmed-count").textContent = confirmed;
+        document.getElementById("rejected-count").textContent = rejected;
+        document.getElementById("total-count").textContent = donations.length;
+    }
+
+
+    function displayDonations(donations) {
+
+        const list = document.getElementById("donations-list");
+
+        if (!donations.length) {
+            list.innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">📋</div>
+                    <h3>No donation records</h3>
+                    <p>There are currently no donation records to review.</p>
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = donations.map(donation => `
+            <div class="donation-card">
+
+                <div class="donation-top">
+
+                    <div class="donor-info">
+
+                        <div class="donor-avatar">
+                            🩸
+                        </div>
+
+                        <div>
+                            <h3>Donor ID</h3>
+                            <p>${donation.donorId}</p>
+                        </div>
+
+                    </div>
+
+                    <span class="status">
+                        ${donation.status || "Pending"}
+                    </span>
+
+                </div>
+
+
+                <div class="details">
+
+                    <div class="detail">
+                        <p>Blood Group</p>
+                        <p class="blood">${donation.bloodGroup}</p>
+                    </div>
+
+                    <div class="detail">
+                        <p>Donation Date</p>
+                        <p>${new Date(donation.donationDate).toLocaleDateString()}</p>
+                    </div>
+
+                    <div class="detail">
+                        <p>Record ID</p>
+                        <p>${donation._id}</p>
+                    </div>
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                        class="btn confirm"
+                        onclick="confirmDonation('${donation._id}')">
+                        ✅ Confirm
+                    </button>
+
+                    <button
+                        class="btn reject"
+                        onclick="rejectDonation('${donation._id}')">
+                        ❌ Reject
+                    </button>
+
+                </div>
+
+            </div>
+        `).join("");
+    }
+
+
+    document.getElementById("search").addEventListener("input", function () {
+
+        const query = this.value.toLowerCase();
+
+        const filtered = allDonations.filter(donation =>
+            String(donation.donorId).toLowerCase().includes(query) ||
+            String(donation.bloodGroup).toLowerCase().includes(query)
+        );
+
+        displayDonations(filtered);
+    });
+</script>
 </body>
 </html>
