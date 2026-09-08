@@ -362,7 +362,7 @@
     <p id="login-message" style="margin-top:20px;"></p>
 
 </div>
-
+<div id="admin-dashboard" style="display:none;">
     <header class="header">
 
         <div class="brand">
@@ -465,6 +465,7 @@
     <footer>
         © 2026 BloodBridge · Admin Management System
     </footer>
+    </div>
 <script>
     let allDonations = [];
 
@@ -653,6 +654,7 @@ google.accounts.id.initialize({
             }
 
             document.getElementById("admin-login").style.display = "none";
+            document.getElementById("admin-dashboard").style.display = "block";
 
             loginMessage.textContent = "Admin login successful.";
 
