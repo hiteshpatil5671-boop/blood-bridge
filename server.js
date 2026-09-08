@@ -25,7 +25,43 @@ app.use(express.json());
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("MongoDB Connected Successfully!");
+// Admin Google login
+app.post("/api/auth/admin", async (req, res) => {
+    try {
+        const { credential } = req.body;
 
+        if (!credential) {
+            return res.status(400).json({
+                message: "Google credential is required"
+            });
+        }
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        const email = payload.email;
+
+        if (email !== process.env.ADMIN_EMAIL) {
+            return res.status(403).json({
+                message: "Admin access denied"
+            });
+        }
+
+        res.json({
+            message: "Admin login successful"
+        });
+
+    } catch (error) {
+        console.error("Admin login failed:", error.message);
+
+        res.status(401).json({
+            message: "Admin authentication failed"
+        });
+    }
+});
         app.listen(PORT, "0.0.0.0", () => {
             console.log(
                 `BloodBridge server running at http://localhost:${PORT}`
