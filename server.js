@@ -68,6 +68,12 @@ app.post("/api/auth/google", async (req, res) => {
 
         const payload = ticket.getPayload();
         const email = payload.email;
+        const adminEmail = process.env.ADMIN_EMAIL;
+        if (email !== adminEmail) {
+    return res.status(403).json({
+        message: "Admin access denied"
+    });
+}
 
         const donor = await Donor.findOne({ email });
 
