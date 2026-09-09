@@ -1905,6 +1905,10 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/donors", {
     },
     body: JSON.stringify(donorData)
 })
+            .then(res => res.json())
+.then(data => {
+    localStorage.setItem("bloodbridge_donor", JSON.stringify(data.donor));
+});
             
 
             showNotification(`Thank you ${name}! You're now a registered donor.`, 'success');
