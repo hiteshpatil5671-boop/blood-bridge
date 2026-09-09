@@ -623,6 +623,10 @@
         displayDonations(filtered);
     });
     window.addEventListener("load", function () {
+        if (sessionStorage.getItem("adminCredential")) {
+    document.getElementById("admin-login").style.display = "none";
+    document.getElementById("admin-dashboard").style.display = "block";
+}
     const adminLoginButton = document.getElementById("google-login-button");
 const loginMessage = document.getElementById("login-message");
 
