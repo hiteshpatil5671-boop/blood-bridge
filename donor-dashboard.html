@@ -552,37 +552,43 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/donors/" + donorId, {
 
             }
         );
-fetch("https://blood-bridge-2rmt.onrender.com/api/donations")
-    .then(res => res.json())
-    .then(data => {
-        const historyList = document.getElementById("donation-history-list");
+if (donor) {
+    fetch("https://blood-bridge-2rmt.onrender.com/api/donations")
+        .then(res => res.json())
+        .then(data => {
+            const historyList = document.getElementById("donation-history-list");
 
-        if (!data.length) {
-            historyList.innerHTML = `
-                <p>No donations recorded yet.</p>
-            `;
-            return;
-        }
+            const myDonations = data.filter(
+                donation => donation.donorId === donor._id
+            );
 
-        historyList.innerHTML = data.map(donation => `
-            <div class="history-item">
-                <div>
-                    <strong>Blood Donation</strong>
-                    <p>Blood Group: ${donation.bloodGroup}</p>
-                    <p>Date: ${new Date(donation.donationDate).toLocaleDateString()}</p>
-                    <p>Status: ${donation.status || "Pending"}</p>
+            if (!myDonations.length) {
+                historyList.innerHTML = `
+                    <p>No donations recorded yet.</p>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = myDonations.map(donation => `
+                <div class="history-item">
+                    <div>
+                        <strong>Blood Donation</strong>
+                        <p>Blood Group: ${donation.bloodGroup}</p>
+                        <p>Date: ${new Date(donation.donationDate).toLocaleDateString()}</p>
+                        <p>Status: ${donation.status || "Pending"}</p>
+                    </div>
+                    <span>🩸</span>
                 </div>
-                <span>🩸</span>
-            </div>
-        `).join("");
-    })
-    .catch(error => {
-        console.error("Donation history error:", error);
+            `).join("");
+        })
+        .catch(error => {
+            console.error("Donation history error:", error);
 
-        document.getElementById("donation-history-list").innerHTML = `
-            <p>Unable to load donation history.</p>
-        `;
-    });
+            document.getElementById("donation-history-list").innerHTML = `
+                <p>Unable to load donation history.</p>
+            `;
+        });
+}
         document.getElementById("record-donation-btn").addEventListener("click", function () {
     if (!donor) return;
 
