@@ -11,6 +11,18 @@ const ContactMessage = require("./models/ContactMessage");
 const Camp = require("./models/Camp");
 const GOOGLE_CLIENT_ID = "1005423740477-au01tr2uijj31fths31vi1l6f4hjq92l.apps.googleusercontent.com";
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+async function verifyGoogleCredential(credential) {
+    if (!credential) {
+        throw new Error("Google credential is required");
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: GOOGLE_CLIENT_ID
+    });
+
+    return ticket.getPayload();
+}
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -186,19 +198,62 @@ app.get("/api/donors", async (req, res) => {
 });
 
 // Register donor
-app.post("/api/donors", async (req, res) => {
+app.post("/api/donations", async (req, res) => {
     try {
-        const donor = new Donor(req.body);
-        const savedDonor = await donor.save();
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                message: "Google authentication required"
+            });
+        }
+
+        const credential = authHeader.split(" ")[1];
+
+        const payload = await verifyGoogleCredential(credential);
+
+        const email = payload.email;
+
+        const donor = await Donor.findOne({ email });
+
+        if (!donor) {
+            return res.status(404).json({
+                message: "Donor account not found"
+            });
+        }
+
+        const { donationDate, bloodGroup } = req.body;
+
+        if (!donationDate || !bloodGroup) {
+            return res.status(400).json({
+                message: "Donation date and blood group are required"
+            });
+        }
+
+        if (bloodGroup !== donor.bloodGroup) {
+            return res.status(403).json({
+                message: "Blood group does not match donor account"
+            });
+        }
+
+        const donation = new Donation({
+            donorId: donor._id,
+            donationDate,
+            bloodGroup: donor.bloodGroup
+        });
+
+        const savedDonation = await donation.save();
 
         res.status(201).json({
-            message: "Donor registered successfully!",
-            donor: savedDonor
+            message: "Donation submitted successfully!",
+            donation: savedDonation
         });
+
     } catch (error) {
-        res.status(400).json({
-            message: "Donor registration failed",
-            error: error.message
+        console.error("Donation authentication error:", error.message);
+
+        res.status(401).json({
+            message: "Donation authentication failed"
         });
     }
 });

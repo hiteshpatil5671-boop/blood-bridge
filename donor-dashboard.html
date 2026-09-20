@@ -600,9 +600,10 @@ if (donor) {
 
     fetch("https://blood-bridge-2rmt.onrender.com/api/donations", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+       headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${sessionStorage.getItem("googleCredential")}`
+},
         body: JSON.stringify({
             donorId: donorId,
             donationDate: donationDate,

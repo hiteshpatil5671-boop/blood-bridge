@@ -1907,6 +1907,7 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/donors", {
 })
             .then(res => res.json())
 .then(data => {
+    console.log("NORMAL REGISTRATION RESPONSE:", data);
     localStorage.setItem("bloodbridge_donor", JSON.stringify(data.donor));
 });
             
@@ -2016,6 +2017,7 @@ const donors = await response.json();
   };
 
  function handleGoogleLogin(response) {
+    sessionStorage.setItem("googleCredential", response.credential);
     fetch("https://blood-bridge-2rmt.onrender.com/api/auth/google", {
         method: "POST",
         headers: {
