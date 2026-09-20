@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const  donorSchema = new mongoose.Schema( 
     {
         name: {
-            type: ,
+            type: string,
             required: true,
             trim: true
         },
