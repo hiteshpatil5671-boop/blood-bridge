@@ -214,6 +214,7 @@ app.post("/api/donors", async (req, res) => {
         });
 
         const savedDonor = await donor.save();
+        console.log("DONOR SAVED TO MONGODB:", savedDonor);
 
         res.status(201).json({
             message: "Donor registered successfully!",
