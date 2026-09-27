@@ -183,7 +183,51 @@ app.put("/api/donors/:id", async (req, res) => {
 // ===============================
 // Donor APIs
 // ===============================
+// Register donor
+app.post("/api/donors", async (req, res) => {
+    try {
+        const { name, email, bloodGroup, location, latitude, longitude } = req.body;
 
+        if (!name || !email || !bloodGroup || !location) {
+            return res.status(400).json({
+                message: "Name, email, blood group and location are required"
+            });
+        }
+
+        const existingDonor = await Donor.findOne({ email });
+
+        if (existingDonor) {
+            return res.status(409).json({
+                message: "Donor with this email is already registered",
+                donor: existingDonor
+            });
+        }
+
+        const donor = new Donor({
+            name,
+            email,
+            bloodGroup,
+            location,
+            latitude,
+            longitude
+        });
+
+        const savedDonor = await donor.save();
+
+        res.status(201).json({
+            message: "Donor registered successfully!",
+            donor: savedDonor
+        });
+
+    } catch (error) {
+        console.error("Donor registration failed:", error);
+
+        res.status(400).json({
+            message: "Donor registration failed",
+            error: error.message
+        });
+    }
+});
 // Get all donors
 app.get("/api/donors", async (req, res) => {
     try {
