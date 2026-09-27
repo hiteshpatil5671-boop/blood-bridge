@@ -185,6 +185,7 @@ app.put("/api/donors/:id", async (req, res) => {
 // ===============================
 // Register donor
 app.post("/api/donors", async (req, res) => {
+    console.log("DONOR REGISTRATION RECEIVED:", req.body);
     try {
         const { name, email, bloodGroup, location, latitude, longitude } = req.body;
 
