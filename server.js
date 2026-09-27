@@ -203,8 +203,9 @@ app.post("/api/donors", async (req, res) => {
                 donor: existingDonor
             });
         }
-
+console.log("CREATING DONOR:", req.body);
         const donor = new Donor({
+            console.log("DONOR OBJECT CREATED:", donor);
             name,
             email,
             bloodGroup,
