@@ -19,6 +19,11 @@ const  donorSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+                phone: {
+            type: String,
+            trim: true,
+            default: ""
+        }
 
         location: {
             type: String,
