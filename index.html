@@ -1974,28 +1974,71 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/requests", {
             e.target.reset();
         }
 
-        // Find Blood Search
-        document.getElementById('find-blood-form')?.addEventListener('submit',async (e) => {
-            e.preventDefault();
-            const bloodGroup = document.getElementById('search-blood-group').value;
-            const location = document.getElementById('search-location').value;
-            const response = await fetch("https://blood-bridge-2rmt.onrender.com/api/donors");
-const donors = await response.json();
-            
-            const results = donors.filter(donor =>
-    (bloodGroup === "All" || donor.bloodGroup === bloodGroup) &&
-    (!location || (donor.location &&
-    donor.location.toLowerCase().includes(location.toLowerCase())))
-);
-            const resultsBox = document.getElementById('search-results');
-            if (results.length === 0) {
-                resultsBox.innerHTML = '<strong>No registered donor found.</strong><br>Try another blood group or location.';
-                showNotification('No matching registered donor found.', 'info');
-                return;
-            }
-            resultsBox.innerHTML = `<div class="card" style="text-align:left;"><div class="card-body"><h3 style="color:var(--color-primary-red);">Matching Registered Donors (${results.length})</h3>${results.map(donor => `<div style="padding:12px 0; border-bottom:1px solid #eee;"><strong>${donor.name}</strong><br><span>${donor.bloodGroup} • ${donor.location}</span></div>`).join('')}<p style="margin-top:12px;font-size:12px;">Demo data is stored only in this browser.</p></div></div>`;
-            showNotification(`${results.length} matching donor(s) found.`, 'success');
+      
+ // Find Blood Search
+document.getElementById('find-blood-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const bloodGroup = document.getElementById('search-blood-group').value;
+    const location = document.getElementById('search-location').value.trim().toLowerCase();
+    const resultsBox = document.getElementById('search-results');
+
+    resultsBox.innerHTML = '<p>Searching donors...</p>';
+
+    try {
+        const response = await fetch('https://blood-bridge-2rmt.onrender.com/api/donors');
+
+        if (!response.ok) {
+            throw new Error('Could not fetch donors');
+        }
+
+        const donors = await response.json();
+
+        const results = donors.filter(donor => {
+            const donorGroup = (donor.bloodGroup || '').trim().toUpperCase();
+            const donorCity = (donor.city || donor.location || '').trim().toLowerCase();
+
+            const groupMatches =
+                bloodGroup === 'All' ||
+                donorGroup === bloodGroup.trim().toUpperCase();
+
+            const cityMatches = donorCity.includes(location);
+
+            return groupMatches && cityMatches;
         });
+
+        if (results.length === 0) {
+            resultsBox.innerHTML =
+                '<strong>No registered donor found.</strong><br>Try another blood group or location.';
+            showNotification('No matching registered donor found.', 'info');
+            return;
+        }
+
+        resultsBox.innerHTML = `
+            <div class="card" style="text-align:left;">
+                <div class="card-body">
+                    <h3 style="color:var(--color-primary-red);">
+                        Matching Registered Donors (${results.length})
+                    </h3>
+                    ${results.map(donor => `
+                        <div style="padding:12px 0; border-bottom:1px solid #eee;">
+                            <strong>${String(donor.name || 'Unknown Donor').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}</strong><br>
+                            <span>${String(donor.bloodGroup || '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>`;
+
+        showNotification(`${results.length} matching donor(s) found.`, 'success');
+
+    } catch (error) {
+        console.error('Find Blood Search error:', error);
+        resultsBox.innerHTML =
+            '<strong>Unable to load donors right now.</strong><br>Please try again shortly.';
+        showNotification('Unable to load donors.', 'error');
+    }
+});
+
 
         // Smooth Scroll Helper
         function scrollToSection(id) {
