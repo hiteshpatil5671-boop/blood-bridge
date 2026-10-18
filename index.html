@@ -2007,6 +2007,7 @@ console.log("CSV sample:", donors.slice(25, 28));
                 donorGroup === bloodGroup.trim().toUpperCase();
 
             const cityMatches = donorCity.includes(location);
+            console.log("Search:", { bloodGroup, location, matches: results.length });
 
             return groupMatches && cityMatches;
         });
