@@ -100,6 +100,13 @@ app.get("/test-camps", (req, res) => {
 // ===============================
 
 app.post("/api/auth/google", async (req, res) => {
+    const adminEmail = process.env.ADMIN_EMAIL;
+
+if (email !== adminEmail) {
+    return res.status(403).json({
+        message: "Admin access denied"
+    });
+}
     try {
         const { credential } = req.body;
 
