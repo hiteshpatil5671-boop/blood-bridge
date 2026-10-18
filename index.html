@@ -1994,6 +1994,9 @@ document.getElementById('find-blood-form')?.addEventListener('submit', async (e)
 
         const donors = await response.json();
         console.log("Total donors:", donors.length, "First CSV record:", donors.find(d => d.city));
+        console.log("First donor:", donors[0]);
+console.log("Donor field names:", Object.keys(donors[0] || {}));
+console.log("CSV sample:", donors.slice(25, 28));
 
         const results = donors.filter(donor => {
             const donorGroup = (donor.bloodGroup || '').trim().toUpperCase();
