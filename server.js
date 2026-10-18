@@ -229,18 +229,21 @@ app.post("/api/donors", async (req, res) => {
         });
     }
 });
-// Get all donors
+
+ // Get all donors
 app.get("/api/donors", async (req, res) => {
     try {
-        const donors = await Donor.find();
+        const donors = await Donor.collection.find({}).toArray();
         res.json(donors);
     } catch (error) {
+        console.error("Failed to fetch donors:", error.message);
         res.status(500).json({
             message: "Failed to fetch donors",
             error: error.message
         });
     }
 });
+
 
 // Register donor
 app.post("/api/donations", async (req, res) => {
