@@ -1975,6 +1975,7 @@ fetch("https://blood-bridge-2rmt.onrender.com/api/requests", {
         }
 
       
+
  // Find Blood Search
 document.getElementById('find-blood-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1993,21 +1994,20 @@ document.getElementById('find-blood-form')?.addEventListener('submit', async (e)
         }
 
         const donors = await response.json();
-        console.log("Total donors:", donors.length, "First CSV record:", donors.find(d => d.city));
-        console.log("First donor:", donors[0]);
-console.log("Donor field names:", Object.keys(donors[0] || {}));
-console.log("CSV sample:", donors.slice(25, 28));
-console.log("Donor groups:", [...new Set(donors.map(d => d.bloodGroup))]);
+
         const results = donors.filter(donor => {
-            const donorGroup = (donor.bloodGroup || '').trim().toUpperCase();
-            const donorCity = (donor.city || donor.location || '').trim().toLowerCase();
+            const donorGroup = String(donor.bloodGroup || donor.Blood_Group || '')
+                .trim().toUpperCase();
+
+            const donorCity = String(
+                donor.city || donor.City || donor.location || ''
+            ).trim().toLowerCase();
 
             const groupMatches =
                 bloodGroup === 'All' ||
                 donorGroup === bloodGroup.trim().toUpperCase();
 
             const cityMatches = donorCity.includes(location);
-        
 
             return groupMatches && cityMatches;
         });
@@ -2025,12 +2025,25 @@ console.log("Donor groups:", [...new Set(donors.map(d => d.bloodGroup))]);
                     <h3 style="color:var(--color-primary-red);">
                         Matching Registered Donors (${results.length})
                     </h3>
-                    ${results.map(donor => `
-                        <div style="padding:12px 0; border-bottom:1px solid #eee;">
-                            <strong>${String(donor.name || 'Unknown Donor').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}</strong><br>
-                            <span>${String(donor.bloodGroup || '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}</span>
-                        </div>
-                    `).join('')}
+                    ${results.map(donor => {
+                        const name = String(donor.name || donor.Full_Name || 'Unknown Donor')
+                            .replace(/[&<>"']/g, char => ({
+                                '&': '&amp;', '<': '&lt;', '>': '&gt;',
+                                '"': '&quot;', "'": '&#39;'
+                            }[char]));
+
+                        const group = String(donor.bloodGroup || donor.Blood_Group || '')
+                            .replace(/[&<>"']/g, char => ({
+                                '&': '&amp;', '<': '&lt;', '>': '&gt;',
+                                '"': '&quot;', "'": '&#39;'
+                            }[char]));
+
+                        return `
+                            <div style="padding:12px 0; border-bottom:1px solid #eee;">
+                                <strong>${name}</strong><br>
+                                <span>${group}</span>
+                            </div>`;
+                    }).join('')}
                 </div>
             </div>`;
 
