@@ -1,5 +1,36 @@
 require("dotenv").config(); 
 
+async function verifyAdminRequest(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                message: "Admin authentication required"
+            });
+        }
+
+        const credential = authHeader.split(" ")[1];
+
+        const payload = await verifyGoogleCredential(credential);
+
+        if (
+            !payload.email ||
+            payload.email.toLowerCase() !==
+            (process.env.ADMIN_EMAIL || "").toLowerCase()
+        ) {
+            return res.status(403).json({
+                message: "Admin access denied"
+            });
+        }
+
+        next();
+    } catch (error) {
+        return res.status(401).json({
+            message: "Admin authentication failed"
+        });
+    }
+}
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -231,7 +262,7 @@ app.post("/api/donors", async (req, res) => {
 });
 
  // Get all donors
-app.get("/api/donors", async (req, res) => {
+app.get("/api/donors", verifyAdminRequest, async (req, res) => {
     try {
         const donors = await Donor.collection.find({}).toArray();
         res.json(donors);
