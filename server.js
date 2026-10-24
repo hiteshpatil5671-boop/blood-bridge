@@ -413,7 +413,7 @@ app.put("/api/donations/:id/status", async (req, res) => {
     }
 });
 // Get donation history
-app.get("/api/donations", async (req, res) => {
+app.get("/api/donations", verifyAdminRequest, async (req, res) => {
     try {
         const donations = await Donation.find().sort({ donationDate: -1 });
         res.json(donations);
